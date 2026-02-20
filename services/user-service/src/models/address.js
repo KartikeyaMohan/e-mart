@@ -60,6 +60,7 @@ Address.init({
   modelName: 'Address',
   tableName: 'addresses',
   timestamps: true,
+  underscored: true,
 });
 
 module.exports = Address;
