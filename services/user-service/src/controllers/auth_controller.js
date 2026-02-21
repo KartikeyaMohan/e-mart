@@ -29,7 +29,13 @@ const login = async (req, res) => {
 
 const refresh = async (req, res) => {
   try {
-    const { refreshToken } = req.body;
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return error(res, 'Refresh token required', 400);
+    }
+
+    const refreshToken = authHeader.split(' ')[1];
     if (!refreshToken) return error(res, 'Refresh token required', 400);
     const result = await authService.refreshTokens(refreshToken);
     return success(res, result, 'Tokens refreshed');
