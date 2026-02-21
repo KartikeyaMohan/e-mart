@@ -58,10 +58,13 @@ services:
 
   user-service:
     build:
-      context: ./services/user-service
+      context: .
+      dockerfile: services/user-service/Dockerfile
     container_name: user-service
     env_file:
       - ./services/user-service/.env
+    ports:
+      - "3001:3001"
     depends_on:
       mysql-user:
         condition: service_healthy

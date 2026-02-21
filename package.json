@@ -1,0 +1,8 @@
+{
+  "name": "e-mart",
+  "private": true,
+  "workspaces": [
+    "services/*",
+    "shared"
+  ]
+}
