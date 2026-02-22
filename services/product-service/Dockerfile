@@ -4,9 +4,13 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm ci --only=production
+COPY shared ./shared
 
-COPY . .
+COPY services/product-service ./services/product-service
+
+RUN npm install --omit=dev --workspace=services/product-service
+
+WORKDIR /app/services/product-service
 
 EXPOSE 3002
 
