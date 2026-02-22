@@ -73,10 +73,13 @@ services:
 
   product-service:
     build:
-      context: ./services/product-service
+      context: .
+      dockerfile: services/product-service/Dockerfile
     container_name: product-service
     env_file:
       - ./services/product-service/.env
+    ports:
+      - "3002:3002"
     depends_on:
       mysql-product:
         condition: service_healthy
@@ -85,10 +88,13 @@ services:
 
   order-service:
     build:
-      context: ./services/order-service
+      context: .
+      dockerfile: services/order-service/Dockerfile
     container_name: order-service
     env_file:
       - ./services/order-service/.env
+    ports:
+      - "3003:3003"
     depends_on:
       mysql-order:
         condition: service_healthy
