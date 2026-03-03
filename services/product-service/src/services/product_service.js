@@ -77,4 +77,10 @@ const remove = async (id) => {
   await product.destroy();
 };
 
-module.exports = { getAll, getById, create, update, remove };
+const updateRating = async (id, { average_rating, review_count }) => {
+  const product = await getById(id);
+  await product.update({ average_rating, review_count });
+  return product;
+};
+
+module.exports = { getAll, getById, create, update, remove, updateRating };
