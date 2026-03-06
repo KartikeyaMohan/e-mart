@@ -50,4 +50,14 @@ const remove = async (req, res) => {
   }
 };
 
-module.exports = { index, show, create, update, remove };
+const updateRating = async (req, res) => {
+  try {
+    const { average_rating, review_count } = req.body;
+    const product = await productService.updateRating(req.params.id, { average_rating, review_count });
+    return success(res, product, 'Rating updated');
+  } catch (err) {
+    return error(res, err.message, err.statusCode || 500);
+  }
+};
+
+module.exports = { index, show, create, update, remove, updateRating };
