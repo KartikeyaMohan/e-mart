@@ -25,7 +25,10 @@ const create = async (req, res) => {
     if (!name || !price || !brand_id || !product_type_id) {
       return error(res, 'name, price, brand_id and product_type_id are required', 400);
     }
-    const product = await productService.create({ name, price, brand_id, product_type_id });
+
+    const image_key = req.file ? req.file.key : null;
+
+    const product = await productService.create({ name, price, brand_id, product_type_id, image_key });
     return success(res, product, 'Product created', 201);
   } catch (err) {
     return error(res, err.message, err.statusCode || 500);
@@ -34,7 +37,11 @@ const create = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    const product = await productService.update(req.params.id, req.body);
+    const image_key = req.file ? req.file.key : null;
+    const product = await productService.update(req.params.id, {
+      ...req.body,
+      image_key,
+    });
     return success(res, product, 'Product updated');
   } catch (err) {
     return error(res, err.message, err.statusCode || 500);
