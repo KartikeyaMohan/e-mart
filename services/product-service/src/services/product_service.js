@@ -1,20 +1,29 @@
 const { Product, Brand, ProductType } = require('../models');
+const { getImageUrl } = require('../utils/storage');
 
 const defaultInclude = [
   { model: Brand, as: 'brand', attributes: ['id', 'name'] },
   { model: ProductType, as: 'product_type', attributes: ['id', 'name'] },
 ];
 
-const getAll = ({ brand_id, product_type_id } = {}) => {
+const formatProduct = async (product) => {
+  const data = product.toJSON();
+  data.image_url = await getImageUrl(data.image_key);
+  return data;
+};
+
+const getAll = async ({ brand_id, product_type_id } = {}) => {
   const where = {};
   if (brand_id) where.brand_id = brand_id;
   if (product_type_id) where.product_type_id = product_type_id;
 
-  return Product.findAll({
+  const products = await Product.findAll({
     where,
     include: defaultInclude,
     order: [['name', 'ASC']],
   });
+
+  return Promise.all(products.map(formatProduct));
 };
 
 const getById = async (id) => {
@@ -24,10 +33,10 @@ const getById = async (id) => {
     err.statusCode = 404;
     throw err;
   }
-  return product;
+  return formatProduct(product);
 };
 
-const create = async ({ name, price, brand_id, product_type_id }) => {
+const create = async ({ name, price, brand_id, product_type_id, image_key }) => {
   // Verify brand and product type exist
   const brand = await Brand.findByPk(brand_id);
   if (!brand) {
@@ -43,11 +52,11 @@ const create = async ({ name, price, brand_id, product_type_id }) => {
     throw err;
   }
 
-  const product = await Product.create({ name, price, brand_id, product_type_id });
+  const product = await Product.create({ name, price, brand_id, product_type_id, image_key });
   return getById(product.id);
 };
 
-const update = async (id, { name, price, brand_id, product_type_id }) => {
+const update = async (id, { name, price, brand_id, product_type_id, image_key }) => {
   const product = await getById(id);
 
   if (brand_id) {
@@ -68,7 +77,10 @@ const update = async (id, { name, price, brand_id, product_type_id }) => {
     }
   }
 
-  await product.update({ name, price, brand_id, product_type_id });
+  const updateData = { name, price, brand_id, product_type_id };
+  if (image_key) updateData.image_key = image_key;
+
+  await product.update(updateData);
   return getById(id);
 };
 
