@@ -4,9 +4,13 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm ci --only=production
+COPY shared ./shared
 
-COPY . .
+COPY services/api-gateway ./services/api-gateway
+
+RUN npm install --omit=dev --workspace=services/api-gateway
+
+WORKDIR /app/services/api-gateway
 
 EXPOSE 3000
 

@@ -16,7 +16,7 @@ const start = async () => {
   try {
     await sequelize.authenticate();
     console.log('Database connection established');
-    app.listen(config.port, () => {
+    app.listen(config.port, '0.0.0.0', () => {
       console.log(`Order service running on port ${config.port}`);
     });
   } catch (err) {
