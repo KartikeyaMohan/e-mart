@@ -272,7 +272,7 @@ Expected response:
 | `JWT_SECRET` | Secret for signing access tokens |
 | `JWT_REFRESH_SECRET` | Secret for signing refresh tokens |
 | `JWT_AUTH_EXPIRES_IN` | Duration for auth token validity |
-| `JWT_REFRES_EXPIRES_IN` | Duration for refresh token validity |
+| `JWT_REFRESH_EXPIRES_IN` | Duration for refresh token validity |
 
 ### `product-service/.env`
 
