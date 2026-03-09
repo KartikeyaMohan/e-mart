@@ -2,8 +2,18 @@ const express = require('express');
 const helmet = require('helmet');
 const config = require('./config');
 const { defaultLimiter } = require('./middleware/rate_limiter');
+const cors = require('cors');
 
 const app = express();
+
+const corsOptions = {
+  origin: process.env.ALLOWED_ORIGINS?.split(',') || '*',
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 // Security headers
 app.use(helmet());
