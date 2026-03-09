@@ -1,5 +1,5 @@
 const { Product, Brand, ProductType } = require('../models');
-const { getImageUrl } = require('../utils/storage');
+const { getImageUrl, deleteImage } = require('../utils/storage');
 
 const defaultInclude = [
   { model: Brand, as: 'brand', attributes: ['id', 'name'] },
@@ -10,6 +10,16 @@ const formatProduct = async (product) => {
   const data = product.toJSON();
   data.image_url = await getImageUrl(data.image_key);
   return data;
+};
+
+const findById = async (id) => {
+  const product = await Product.findByPk(id, { include: defaultInclude });
+  if (!product) {
+    const err = new Error('Product not found');
+    err.statusCode = 404;
+    throw err;
+  }
+  return product;
 };
 
 const getAll = async ({ brand_id, product_type_id } = {}) => {
@@ -27,12 +37,7 @@ const getAll = async ({ brand_id, product_type_id } = {}) => {
 };
 
 const getById = async (id) => {
-  const product = await Product.findByPk(id, { include: defaultInclude });
-  if (!product) {
-    const err = new Error('Product not found');
-    err.statusCode = 404;
-    throw err;
-  }
+  const product = await findById(id);
   return formatProduct(product);
 };
 
@@ -57,7 +62,7 @@ const create = async ({ name, price, brand_id, product_type_id, image_key }) => 
 };
 
 const update = async (id, { name, price, brand_id, product_type_id, image_key }) => {
-  const product = await getById(id);
+  const product = await findById(id);
 
   if (brand_id) {
     const brand = await Brand.findByPk(brand_id);
@@ -78,19 +83,24 @@ const update = async (id, { name, price, brand_id, product_type_id, image_key })
   }
 
   const updateData = { name, price, brand_id, product_type_id };
-  if (image_key) updateData.image_key = image_key;
+  if (image_key) {
+    if (product.image_key) {
+      await deleteImage(product.image_key);
+    }
+    updateData.image_key = image_key;
+  }
 
   await product.update(updateData);
   return getById(id);
 };
 
 const remove = async (id) => {
-  const product = await getById(id);
+  const product = await findById(id);
   await product.destroy();
 };
 
 const updateRating = async (id, { average_rating, review_count }) => {
-  const product = await getById(id);
+  const product = await findById(id);
   await product.update({ average_rating, review_count });
   return product;
 };

@@ -15,9 +15,6 @@ module.exports = {
   },
   jwt: {
     secret: process.env.JWT_SECRET,
-    refreshSecret: process.env.JWT_REFRESH_SECRET,
-    accessExpiresIn: process.env.JWT_AUTH_EXPIRES_IN,
-    refreshExpiresIn: process.env.JWT_REFRES_EXPIRES_IN,
   },
   aws: {
     region: process.env.AWS_REGION,
