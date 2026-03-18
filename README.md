@@ -450,7 +450,7 @@ The IAM user attached to the access keys needs the following S3 permissions on y
     "s3:GetObject",
     "s3:DeleteObject"
   ],
-  "Resource": "arn:aws:s3:::your-bucket-name/*"
+  "Resource": "arn:aws:s3:::e-mart/*"
 }
 ```
 
