@@ -1,4 +1,4 @@
-const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3');
+const { S3Client, GetObjectCommand, DeleteObjectCommand  } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
@@ -9,8 +9,8 @@ const config = require('../config');
 const s3 = new S3Client({
   region: config.aws.region,
   credentials: {
-    accessKeyId: config.aws.accessKeyId,
-    secretAccessKey: config.aws.secretAccessKey,
+    accessKeyId: config.aws.accessKey,
+    secretAccessKey: config.aws.secretKey,
   },
 });
 
@@ -47,4 +47,13 @@ const getImageUrl = async (key) => {
   return getSignedUrl(s3, command, { expiresIn: 3600 });
 };
 
-module.exports = { upload, getImageUrl, s3 };
+const deleteImage = async (key) => {
+  if (!key) return;
+  const command = new DeleteObjectCommand({
+    Bucket: config.aws.bucketName,
+    Key: key,
+  });
+  await s3.send(command);
+};
+
+module.exports = { upload, getImageUrl, s3, deleteImage };

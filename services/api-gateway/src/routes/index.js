@@ -41,19 +41,16 @@ router.use(
 
 router.use(
   '/api/v1/products',
-  authenticate,
   proxyWithPath(config.services.productServiceUrl)
 );
 
 router.use(
   '/api/v1/brands',
-  authenticate,
   proxyWithPath(config.services.productServiceUrl)
 );
 
 router.use(
   '/api/v1/product-types',
-  authenticate,
   proxyWithPath(config.services.productServiceUrl)
 );
 
@@ -73,7 +70,6 @@ router.use(
 
 router.use(
   '/api/v1/reviews',
-  authenticate,
   proxyWithPath(config.services.orderServiceUrl)
 );
 

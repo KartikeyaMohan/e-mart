@@ -271,6 +271,8 @@ Expected response:
 | `DB_PASSWORD` | Database password |
 | `JWT_SECRET` | Secret for signing access tokens |
 | `JWT_REFRESH_SECRET` | Secret for signing refresh tokens |
+| `JWT_AUTH_EXPIRES_IN` | Duration for auth token validity |
+| `JWT_REFRESH_EXPIRES_IN` | Duration for refresh token validity |
 
 ### `product-service/.env`
 
@@ -284,9 +286,9 @@ Expected response:
 | `DB_PASSWORD` | Database password |
 | `JWT_SECRET` | Secret for verifying access tokens |
 | `AWS_REGION` | AWS region for S3 |
-| `AWS_ACCESS_KEY_ID` | IAM access key |
-| `AWS_SECRET_ACCESS_KEY` | IAM secret key |
-| `AWS_S3_BUCKET_NAME` | S3 bucket name for product images |
+| `AWS_ACCESS_KEY` | IAM access key |
+| `AWS_SECRET_KEY` | IAM secret key |
+| `AWS_S3_BUCKET` | S3 bucket name for product images |
 
 ### `order-service/.env`
 

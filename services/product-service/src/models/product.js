@@ -32,6 +32,20 @@ Product.init({
     allowNull: false,
     references: { model: 'product_types', key: 'id' },
   },
+  average_rating: {
+    type: DataTypes.DECIMAL(3, 2),
+    allowNull: true,
+    defaultValue: null,
+  },
+  review_count: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0,
+  },
+  image_key: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  }
 }, {
   sequelize,
   modelName: 'Product',
